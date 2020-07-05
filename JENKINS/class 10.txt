@@ -1,0 +1,54 @@
+Multi brach Pipeline
+----------------------
+Developers upload multiple branches in github repository
+Each branch containing a specific functionality code
+along with that code developers will also place a copy of the jenkins file on each branch 
+and this jenkins files will have instructions related to code present on that branch 
+
+we should create a jenkins job which will read all this branches paralley and execute the instruction
+present in these jenkins files
+
+This concept is known as multi branch pipeline 
+
+
+Developers activity
+====================
+1.Download Maven Project 
+	git clone https://github.com/intelliqittraings/maven.git
+2.move into this maven project and delete the .git folder
+	cd maven
+	rm -rf .git
+3.initialise a new git repo and send the files into stagging area and local repo
+	git init
+	git add .
+	git commit -m "a"
+
+4.create a jenkinsfile on master branch and this files will have code related to master branch
+
+5.create a new branch called loans and here also create a new jenkinsfile
+ 	git checkout loans
+6.create a new repository on github--------->push all these branches into it
+	git push origin --all
+
+
+
+Devops Engineer activity
+---------------------------
+1.open the dashboard of the jenkins
+
+2.create the job
+
+3.enter some job name------->select multi branch pipeline----->ok
+
+4.Go to branch sources --------->select git--------->enter github url where the code is uploaded
+
+5.go to scan multibranch pipeline projects
+
+6.check build periodically if not otherwise run --------->select the interval as one minute
+
+7.click on save
+
+Now if the developer makes changes to multiple branches code uploads into git hub jenkins will read al1 these branches and execute
+the multiple jenkins file paralley
+
+

@@ -1,0 +1,101 @@
+Pipeline as code  :
+=================
+
+This is the process of implementing all the stages of CI/CD called as jenkins File
+This jenkins file is created using grovy script
+And it is uploaded into the remote version controlling system
+from the remote version controlling system jenkins file will perform all the stages of CI/CD
+
+
+Advantages:
+----------
+1.it requires minimum No of plugins so,it's generally more faster 
+
+2.it can be instant planned and unplaned restats of the jenkins master
+
+3.pipeline scripts support real time challenges like implementing conditional statements,exception handling etc 
+
+4.since the jenkins files checked In into remote version controlling system ,it gives the team members ability to edit 
+and review the code and still maintained multiple versions 
+
+5.open source 
+
+6.it contains 1000+ plugins 
+
+7.easy to install
+
+8.free of cost
+
+
+
+pipeline as code can be implemted in two ways 
+	1.scripted pipeline
+	2.declarative pipeline
+
+
+
+1.scripted pipeline
+-------------------
+node('master/slave')
+{
+	stage('stage name in CI-CD')
+	{
+
+		groovy code for implementing this stage
+
+	}
+}
+
+
+Syntax of declarative pipeline
+------------------------------
+ 
+pipeline{
+
+        agent any
+        stages {
+
+          stage('name of CI-CD')
+
+            step{
+		
+		groovy script in CI-CD
+
+
+            }
+ }
+
+}
+
+----------------------------------------------
+Scripted pipeline:
+==================
+
+node('master')
+{
+    stage('ContinuousDownload') 
+    {
+         git 'https://github.com/selenium-saikrishna/maven.git'
+    }
+    stage('ContinuousBuild') 
+    {
+         sh label: '', script: 'mvn package'
+    }
+    stage('ContinuousDeployment')
+    {
+        sh label: '', script: 'scp /home/ubuntu/.jenkins/workspace/ScriptedPipeline/webapp/target/webapp.war ubuntu@172.31.12.49:/var/lib/tomcat8/webapps/testenv.war'
+    }
+    stage('ContinuousTesting')
+    {
+        git 'https://github.com/selenium-saikrishna/FunctionalTesting.git'
+        sh label: '', script: 'java -jar /home/ubuntu/.jenkins/workspace/ScriptedPipeline/testing.jar'
+    }
+     stage('ContinuousDelivery')
+    {
+        input message: 'Waiting for Approval from the DM', submitter: 'Srinivas'
+        sh label: '', script: 'scp /home/ubuntu/.jenkins/workspace/ScriptedPipeline/webapp/target/webapp.war ubuntu@172.31.13.206:/var/lib/tomcat8/webapps/prodenv.war'
+    }
+    
+    
+}
+

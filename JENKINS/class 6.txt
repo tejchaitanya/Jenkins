@@ -1,0 +1,90 @@
+master slave set up of jenkins
+------------------------------
+This is also known distributed jenkins build
+when we want to run multiple jenkins jobs parallely it will effect the performance of the 
+jenkins server 
+The main machine the jenkins is configued is called as master 
+we can create additional linux servers which will behave as slaves and then distribute the work load 
+on to their slaves machines 
+
+NOTE:master and slave should have same version of java installed and password less SSH connectivty should
+be estlabished b/w master and slave 
+
+setup for Master/slave 
+---------------------
+1.create a new ubuntu instance and name it as slave-1
+
+2.connect to slave intance using git bash
+
+3.update the apt-get repository and install java
+	a)sudo apt-get update
+	b)sudo apt-get install -y openjdk-8-jdk
+4.setup password less ssh b/w master and slave 
+	 on slave
+	-----------
+	a)change the password for the default ubuntu user
+		sudo passwd ubuntu
+	b)edit sshd_config file
+		sudo vim /etc/ssh/sshd_config
+		search for "passwordAuthentication" and change it from no to yes
+	c)after modifying the ssh_config we have to restart the service
+		sudo service ssh restart
+	on master 
+	--------
+	a)generate ssh keys
+		ssh-keygen
+	this will generate keys public and private keys
+
+	b)copy the public keys
+		ssh-copyid ubuntu@private_IP_OF_slave 
+		this command will copy the connect of the public key and save in the slave machine
+		in a file called "authorized_keys"
+
+
+
+---------------------------------------------------- 
+5.Download slave.jar into the slave instance
+  
+	connect to slave using git bash
+        wget https://Private_ip_of_address_master:800/jnlpJars/slave.jar
+6.By default every user having only read and write permission only,so we have to give execute permission
+          $chmod u+x slave.jar
+
+6.create a empty folder on the slave which will work like a workspace
+	 $mkdir workspace
+7.open dashboard of jenkins
+
+8.click on managed nodes
+
+10.click on new node----------->enter node name as slave1
+   select permanant Agent---->ok
+11.remote root directory
+	/home/ubuntu/workspace
+12.label we enter it as myslave
+ 
+13.go to lauch method select "launch agent via execution of command on the master"
+    ssh ubuntu@private_IP_OF_SLAVE  java -jar slave.jar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
